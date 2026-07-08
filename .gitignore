@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+_test_out.docx
+*.pdf
+.DS_Store
