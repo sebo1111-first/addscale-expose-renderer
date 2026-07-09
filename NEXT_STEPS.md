@@ -36,7 +36,23 @@ File: Fotos (Multiple)
 - WICHTIG: ZIP/große Uploads sprengen n8n-Form-Limit (25,7 MB ZIP = Submit-Fail).
   Nutzer müssen EINZELNE JPGs hochladen, nicht gezippt.
 
-## Offen / später
+## Vorlagen-Render lokal (WICHTIG für künftige Template-Arbeit)
+- LibreOffice ist lokal installiert (`brew install --cask libreoffice`, soffice unter
+  /opt/homebrew/bin/soffice). Fonts liegen in ~/Library/Fonts (= wie Server).
+- Vorlage lokal rendern statt deployen:
+  `/opt/homebrew/bin/soffice --headless --convert-to pdf --outdir /tmp/lo /pfad/template.docx`
+  → PDF prüfen, iterieren, ERST DANN deployen. Kein Blind-Raten mehr.
+
+## Vorlagen-Fixes ERLEDIGT (09.07, lokal getestet)
+- Überschriften abgeschnitten → gefixt: explizite Run-Größe injizieren (Style-Vererbung
+  ignoriert LibreOffice!). Titel1 + Titel10 = sz 36 (18pt), Untertitel10 = sz 28 (14pt).
+  ⚠️ Es gibt 2 Kopien je Überschrift (mc:Choice + Fallback) — BEIDE bearbeiten.
+- Alle 4 Lorem-Blöcke raus (Küche, Ausstattung, Uciamus/S.9, Sunt). Anker müssen
+  ZUSAMMENHÄNGENDE Roh-XML-Fragmente sein (Wörter oft durch proofErr zerhackt).
+
+## Offen / später (klein, kosmetisch)
+- Winziger „." Rest S.8 (Ausstattung) · leerer Highlight-Slot 02 (S.9) ·
+  Doppel-Punkt „.." wo KI-Text endet (Template hat Trailing-„." nach Prosa-Tags).
 - Vorlage hat noch KEINE Slots für: Zimmer/Schlafzimmer/Badezimmer/Kamin(Befeuerung),
   Energie-Text-Block, Highlight_4.
 - Firmen-/Kontaktdaten (Node 3 FIRMA-Block): Betreuer = Marco Eschbach ✓;
