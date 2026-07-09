@@ -2,8 +2,13 @@ FROM python:3.11-slim
 
 # LibreOffice für docx -> PDF
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends libreoffice-writer fonts-dejavu && \
+    apt-get install -y --no-install-recommends libreoffice-writer fonts-dejavu fontconfig && \
     rm -rf /var/lib/apt/lists/*
+
+# Vorlagen-Schriften (Source Sans Pro + Open Sans) — ohne die schneidet
+# LibreOffice die Überschriften ab und nimmt Ersatz-Serifenschrift
+COPY fonts/ /usr/share/fonts/truetype/custom/
+RUN fc-cache -f
 
 WORKDIR /app
 COPY requirements.txt .
