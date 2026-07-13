@@ -122,6 +122,17 @@ File: Fotos (Multiple)
 - app.py: NEU POST /thumbs {photos:[base64]} → {thumbs:[base64 klein]} für Vision-Analyse.
 - DEPLOY: git add -A && git commit && git push → Render Dashboard → Manual Deploy.
 
+## v1.1 — EIGENE UPLOAD-SEITE (gebaut 13.07., ersetzt n8n-Formular)
+- GET / = gebrandetes Formular (alle Felder + Multi-Foto-Upload, Originalgrößen ok).
+  POST /submit = verkleinert serverseitig (1600px + 512px-Thumbs, EXIF-Rotation),
+  schickt {Felder, fotos_b64, thumbs_b64} an Env-Var N8N_WEBHOOK_URL. /health = JSON-Check.
+- GRUND: n8n-Form kann max ~16 MB und die Cloud-Instanz stirbt an Base64 großer Fotos (OOM 13.07.).
+- n8n-UMBAU dazu: Webhook-Node (POST, Respond Immediately) → Code-Node `return [{json: $json.body}]`
+  UMBENANNT in "On form submission" (hält alle bestehenden Expressions am Leben!) → Rest-Kette.
+  Nodes "Fotos zu Base64" + "Thumbs" entfallen. Vision Body liest thumbs_b64, Node 3 fotos_b64
+  via $('On form submission'). requirements.txt: +python-multipart.
+- OFFEN: Porträt-Foto Marco (Slot 21) fix hinterlegen, sobald Foto da.
+
 ## Phase B — Foto-KI (nach Text-Kette; Sebastians Kern-Wunsch 09.07)
 - ZIEL: Nutzer lädt ~20 beliebige Fotos hoch → KEINE manuelle Auswahl/Zuordnung.
   Claude Vision bewertet jedes Foto (Raum-Typ + Qualität) und ordnet die besten
