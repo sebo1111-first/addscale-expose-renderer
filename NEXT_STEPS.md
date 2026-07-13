@@ -183,8 +183,9 @@ File: Fotos (Multiple)
   ZUSAMMENHÄNGENDE Roh-XML-Fragmente sein (Wörter oft durch proofErr zerhackt).
 
 ## Offen / später (klein, kosmetisch)
-- Winziger „." Rest S.8 (Ausstattung) · leerer Highlight-Slot 02 (S.9) ·
-  Doppel-Punkt „.." wo KI-Text endet (Template hat Trailing-„." nach Prosa-Tags).
+- ✅ ERLEDIGT 14.07.: Streu-Punkt S.8 raus, Trailing-Punkte nach allen Prosa-Tags raus
+  (kein „.." mehr), Highlight-Nummern auf 01/02/03 renummeriert (02-Box existierte
+  im Design nie — Nummer 02 geblankt, 03→02, 04→03; Galerie/TOC unberührt, verifiziert).
 - Vorlage hat noch KEINE Slots für: Zimmer/Schlafzimmer/Badezimmer/Kamin(Befeuerung),
   Energie-Text-Block, Highlight_4.
 - Firmen-/Kontaktdaten (Node 3 FIRMA-Block): Betreuer = Marco Eschbach ✓;
