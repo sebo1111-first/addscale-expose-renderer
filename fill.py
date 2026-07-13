@@ -2,12 +2,31 @@
 import io, zipfile
 from PIL import Image
 
-# Foto-Slots der Vorlage in numerischer Reihenfolge (Titel/Galerie kommen zuerst)
+# Foto-Slots in VISUELLER Reihenfolge (siehe Slot-Karte in NEXT_STEPS.md).
+# Galerie-Kacheln 01-06 sind seit dem Dedup-Fix eigene Dateien (image22-25 = Kopien).
+# Leerer Eintrag ("" / None) im photos-Array => Slot wird übersprungen.
 PHOTO_SLOTS = [
-    "image1.jpeg", "image3.jpeg", "image4.jpeg", "image5.jpeg", "image6.jpeg",
-    "image7.jpeg", "image8.jpeg", "image9.jpeg", "image10.jpeg", "image11.jpeg",
-    "image13.jpeg", "image14.jpeg", "image15.jpeg", "image16.jpeg", "image17.jpeg",
-    "image18.jpeg", "image21.jpeg",
+    "image1.jpeg",   # 1  Titelbild (Hexagon-Mosaik, vorne + hinten)
+    "image3.jpeg",   # 2  Inhaltsseite Bildspalte
+    "image4.jpeg",   # 3  Inhaltsseite Hexagon-Akzente (3x gleiches Bild)
+    "image5.jpeg",   # 4  Lage groß links
+    "image6.jpeg",   # 5  Beschreibung Hexagon links
+    "image7.jpeg",   # 6  Daten im Überblick rechts
+    "image8.jpeg",   # 7  Ausstattung S.6 links (Wohnzimmer)
+    "image9.jpeg",   # 8  Ausstattung S.6 rechts oben (Akzent)
+    "image10.jpeg",  # 9  Ausstattung S.6 rechts groß
+    "image11.jpeg",  # 10 Ausstattung S.7 (Schlafzimmer/Küche)
+    "image13.jpeg",  # 11 Ausstattung S.8 unten breit
+    "image14.jpeg",  # 12 Sonstige Angaben rechts oben
+    "image15.jpeg",  # 13 Sonstige Angaben rechts unten
+    "image16.jpeg",  # 14 GRUNDRISS ganzseitig
+    "image18.jpeg",  # 15 Galerie Kachel 01
+    "image22.jpeg",  # 16 Galerie Kachel 02 (XML-Reihenfolge != visuell, per Testrender verifiziert)
+    "image17.jpeg",  # 17 Galerie Kachel 03
+    "image23.jpeg",  # 18 Galerie Kachel 04
+    "image24.jpeg",  # 19 Galerie Kachel 05
+    "image25.jpeg",  # 20 Galerie Kachel 06
+    "image21.jpeg",  # 21 PORTRÄT Ansprechpartner (Kreis, letzte Seite)
 ]
 
 def _esc(s):
@@ -38,6 +57,8 @@ def fill(docx_bytes, variables, photos=None):
     # 2) Fotos: Slot-Bilder ersetzen (auf Original-Slotgröße skaliert -> Design bleibt)
     new_media = {}
     for slot, photo in zip(PHOTO_SLOTS, photos or []):
+        if not photo:
+            continue  # leerer Eintrag => Slot behält Platzhalter (z. B. kein Grundriss geliefert)
         try:
             orig = Image.open(io.BytesIO(zin.read("word/media/" + slot)))
             w, h = orig.size

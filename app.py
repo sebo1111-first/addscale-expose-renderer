@@ -3,6 +3,7 @@ import base64, io, os, subprocess, tempfile
 from fastapi import FastAPI
 from fastapi.responses import Response
 from pydantic import BaseModel
+from PIL import Image
 import requests
 from fill import fill
 
@@ -21,6 +22,24 @@ def _load(p: str) -> bytes:
 @app.get("/")
 def health():
     return {"status": "ok", "service": "addscale-expose-renderer"}
+
+class ThumbsRequest(BaseModel):
+    photos: list[str] = []        # base64-Strings (Original-Fotos)
+
+@app.post("/thumbs")
+def thumbs(req: ThumbsRequest):
+    """Kleine Vorschau-Bilder für die KI-Foto-Analyse (spart Tokens + Upload-Größe)."""
+    out = []
+    for p in req.photos:
+        try:
+            img = Image.open(io.BytesIO(_load(p))).convert("RGB")
+            img.thumbnail((512, 512))
+            buf = io.BytesIO()
+            img.save(buf, "JPEG", quality=60)
+            out.append(base64.b64encode(buf.getvalue()).decode())
+        except Exception:
+            out.append("")
+    return {"thumbs": out}
 
 @app.post("/render")
 def render(req: RenderRequest):
