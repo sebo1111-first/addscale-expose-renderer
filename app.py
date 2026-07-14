@@ -61,7 +61,8 @@ TEXTAREAS = [
 def _form_html() -> str:
     inputs = "".join(
         f'<label>{name}{"*" if name in ("Titel", "E-Mail") else ""}'
-        f'<input type="{typ}" name="{name}" placeholder="{ph}"{" required" if name in ("Titel", "E-Mail") else ""}></label>'
+        f'<input type="{typ}" name="{name}" placeholder="{ph}"{" required" if name in ("Titel", "E-Mail") else ""}'
+        f'{" maxlength=60" if name == "Titel" else ""}></label>'
         for name, typ, ph in FELDER
     )
     areas = "".join(
